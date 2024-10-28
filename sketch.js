@@ -36,19 +36,18 @@ function draw() {
     rect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
   }
 
-  // Logic for jumping
-  if (jumping) { 
-    y += jumpSpeed; 
-    jumpSpeed += gravity; 
+// Logic for jumping and gravity
+if (jumping) { 
+  y += jumpSpeed; 
+  jumpSpeed += gravity; 
 
-    // Limit the square to the ground (prevents it from falling indefinitely)
-    if (y >= 175) {
-      y = 175; 
-      jumping = false; 
-      jumpSpeed = 0; 
-    }
+  // Limit the square to the bottom of the canvas (prevents it from falling indefinitely)
+  if (y + size >= height) {
+    y = height - size; // Set the square's position to rest on the bottom
+    jumping = false; 
+    jumpSpeed = 0; 
   }
-
+}
   // Check for collisions with obstacles
   for (let obstacle of obstacles) {
     if (collidesWithRectangle(x, y, size, size, obstacle.x, obstacle.y, obstacle.width, obstacle.height)) {
