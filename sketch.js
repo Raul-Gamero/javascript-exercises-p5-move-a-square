@@ -1,13 +1,13 @@
 // Variables for the position and speed of the square
-let x = 175; 
-let y = 175; 
+let x = 0; 
+let y = 400; 
 let size = 50; 
 let speed = 5; 
 
 // Variables for enabling jump
 let jumping = false; 
 let jumpSpeed = 0; 
-let gravity = 0.5; 
+let gravity = 0.2; 
 
 // Obstacles (rectangles)
 let obstacles = [
@@ -51,8 +51,19 @@ if (jumping) {
   // Check for collisions with obstacles
   for (let obstacle of obstacles) {
     if (collidesWithRectangle(x, y, size, size, obstacle.x, obstacle.y, obstacle.width, obstacle.height)) {
-      fill(255, 255, 0); 
-      rect(x, y, size, size); 
+      // Adjust position to prevent passing through the obstacle
+      if (x + size > obstacle.x && x < obstacle.x) { // From the left
+        x = obstacle.x - size;
+      } else if (x < obstacle.x + obstacle.width && x + size > obstacle.x + obstacle.width) { // From the right
+        x = obstacle.x + obstacle.width;
+      } else if (y + size > obstacle.y && y < obstacle.y) { // From the top
+        y = obstacle.y - size;
+        jumping = false; // Stop jumping if it hits the top of an obstacle
+        jumpSpeed = 0; 
+      } else if (y < obstacle.y + obstacle.height && y + size > obstacle.y + obstacle.height) { // From the bottom
+        y = obstacle.y + obstacle.height;
+        jumpSpeed = 0; // Reset jump speed to prevent falling through
+      }
     }
   }
   // Limit square position within canvas boundaries
@@ -63,11 +74,11 @@ if (jumping) {
 function keyPressed() {
   // Move left when the left arrow key is pressed
   if (keyCode === LEFT_ARROW) {
-    x -= speed; 
+    x -= speed*2; 
   }
   // Move right when the right arrow key is pressed
   if (keyCode === RIGHT_ARROW) {
-    x += speed; 
+    x += speed*2; 
   }
   // Move up when the up arrow key is pressed
   if (keyCode === UP_ARROW) {
