@@ -1,19 +1,20 @@
 // Variables for the position and speed of the square
-let x = 175; // Initial position on the X axis
-let y = 175; // Initial position on the Y axis
-let size = 50; // Size of the square (50x50 pixels)
-let speed = 5; // Speed of the square's movement
+let x = 175; 
+let y = 175; 
+let size = 50; 
+let speed = 5; 
 
 // Variables for enabling jump
-let jumping = false; // Variable to track if the square is in the air (jumping)
-let jumpSpeed = 0; // Speed of the square when jumping
-let gravity = 0.5; // Gravity that affects the square while it's in the air
+let jumping = false; 
+let jumpSpeed = 0; 
+let gravity = 0.5; 
 
 // Obstacles (rectangles)
 let obstacles = [
-  { x: 100, y: 300, width: 150, height: 20 },  // Obstacle 1 (position and size)
-  { x: 300, y: 200, width: 100, height: 20 },  // Obstacle 2 (position and size)
+  { x: 100, y: 300, width: 150, height: 20 },  
+  { x: 300, y: 200, width: 100, height: 20 },  
 ];
+
 
 function setup() {
   // Create a 400x400 pixel canvas where everything will be drawn
@@ -25,8 +26,8 @@ function draw() {
   background(220);
   
   // Draw the square
-  fill(255, 0, 0); // Red fill for the square
-  rect(x, y, size, size); // Draw the square at position x, y, with the defined size
+  fill(255, 0, 0); 
+  rect(x, y, size, size); 
 
   // Draw obstacles
   fill(0, 0, 255); // Blue fill for the obstacles
@@ -37,49 +38,50 @@ function draw() {
 
   // Logic for jumping
   if (jumping) { 
-    // If the square is in the air (jumping), update its Y position
-    y += jumpSpeed; // Change the square's position based on the jump speed
-    jumpSpeed += gravity; // The jump speed decreases due to gravity
+    y += jumpSpeed; 
+    jumpSpeed += gravity; 
 
     // Limit the square to the ground (prevents it from falling indefinitely)
     if (y >= 175) {
-      y = 175; // Keep the square on the ground (initial Y position)
-      jumping = false; // Stop jumping once it touches the ground
-      jumpSpeed = 0; // Reset the jump speed
+      y = 175; 
+      jumping = false; 
+      jumpSpeed = 0; 
     }
   }
 
   // Check for collisions with obstacles
   for (let obstacle of obstacles) {
-    // If the square collides with an obstacle, change its color to yellow
     if (collidesWithRectangle(x, y, size, size, obstacle.x, obstacle.y, obstacle.width, obstacle.height)) {
-      fill(255, 255, 0); // Change the square's color to yellow in case of a collision
-      rect(x, y, size, size); // Redraw the square, but now in yellow
+      fill(255, 255, 0); 
+      rect(x, y, size, size); 
     }
   }
+  // Limit square position within canvas boundaries
+  x = constrain(x, 0, width - size); 
+  y = constrain(y, 0, height - size); 
 }
 
 function keyPressed() {
   // Move left when the left arrow key is pressed
   if (keyCode === LEFT_ARROW) {
-    x -= speed; // Decrease the X position to move the square left
+    x -= speed; 
   }
   // Move right when the right arrow key is pressed
   if (keyCode === RIGHT_ARROW) {
-    x += speed; // Increase the X position to move the square right
+    x += speed; 
   }
   // Move up when the up arrow key is pressed
   if (keyCode === UP_ARROW) {
-    y -= speed; // Decrease the Y position to move the square up
+    y -= speed; 
   }
   // Move down when the down arrow key is pressed
   if (keyCode === DOWN_ARROW) {
-    y += speed; // Increase the Y position to move the square down
+    y += speed; 
   }
   // Make the square jump when the spacebar is pressed
   if (key === ' ' && !jumping) {
-    jumping = true; // Activate jumping state
-    jumpSpeed = -10; // Give an initial upward force (negative to go up)
+    jumping = true; 
+    jumpSpeed = -10; 
   }
 }
 
